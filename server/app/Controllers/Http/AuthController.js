@@ -3,12 +3,20 @@
 const User = use("App/Models/User");
 
 class AuthController {
+  async logIn({ request, auth }) {
+    const { email, password } = request.all();
+
+    const token = await auth.attempt(email, password);
+
+    return token;
+  }
+
   async register({ request }) {
     const data = request.only(["username", "email", "password"]);
 
-    const user = await User.create(data);
+    await User.create(data);
 
-    return user;
+    return this.logIn(...arguments);
   }
 }
 
