@@ -7,6 +7,9 @@ export default {
     registerEmail: null,
     registerPassword: null,
     registerError: null,
+    loginEmail: null,
+    loginPassword: null,
+    loginError: null,
     token: null,
   },
   actions: {
@@ -26,7 +29,22 @@ export default {
           router.push('/');
         })
         .catch(() => {
-          commit('setRegisterError', 'An error has occured.');
+          commit('setRegisterError', 'An error has occured when is creating account.');
+        });
+    },
+    login({ commit, state }) {
+      commit('setLoginError', null);
+      return HTTP()
+        .post('auth/login', {
+          email: state.loginEmail,
+          password: state.loginPassword,
+        })
+        .then(({ data }) => {
+          commit('setToken', data.token);
+          router.push('/');
+        })
+        .catch(() => {
+          commit('setLoginError', 'Invalid credentials.');
         });
     },
   },
@@ -47,6 +65,15 @@ export default {
     },
     setRegisterPassword(state, password) {
       state.registerPassword = password;
+    },
+    setLoginError(state, error) {
+      state.loginError = error;
+    },
+    setLoginEmail(state, email) {
+      state.loginEmail = email;
+    },
+    setLoginPassword(state, password) {
+      state.loginPassword = password;
     },
   },
 };
