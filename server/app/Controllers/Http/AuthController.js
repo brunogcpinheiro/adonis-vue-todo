@@ -12,7 +12,7 @@ class AuthController {
   }
 
   async register({ request }) {
-    const data = request.only(["username", "email", "password"]);
+    const data = request.only(["email", "password"]);
 
     await User.create(data);
 
